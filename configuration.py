@@ -1,3 +1,3 @@
-# Kivy Configuration
-ROWS = 5
-COLS = 5
+# Kivy
+ROWS = 8
+COLS = 3

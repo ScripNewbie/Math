@@ -27,7 +27,7 @@ class Empty(Image):
         self.add_widget(self.label)
 
     def display_field(self):
-        pass
+        self.parent.parent.parent.manager.transition.direction = "left"
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
@@ -44,6 +44,7 @@ class GoldenRatioSelection(Empty):
         self.label.text = "Golden Ratio"
 
     def display_field(self):
+        super().display_field()
         self.parent.parent.parent.manager.current = "GR"
 
 
@@ -54,3 +55,7 @@ class MatrixSelection(Empty):
         self.color = gc("55D7FF")
         self.opacity = 1
         self.label.text = "Matrix"
+
+    def display_field(self):
+        super().display_field()
+        self.parent.parent.parent.manager.current = "Matrix"

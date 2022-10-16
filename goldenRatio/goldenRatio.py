@@ -1,13 +1,14 @@
+from platform import platform
 from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.utils import get_color_from_hex as gc
 from kivy.metrics import dp, sp
+from kivy.utils import platform
 
 
 class GoldenRatioScreen(Screen):
@@ -38,7 +39,7 @@ class Lbel(Image):
         self.height = sp(32)*2
         self.display_label()
         self.bind(pos=self.change_ps, size=self.change_ps)
-        self.y = dp(100)
+        self.y = dp(100) + (0 if platform != "android" else dp(60))
 
     def change_ps(self, *_):
         if hasattr(self, "label"):
@@ -59,7 +60,7 @@ class GoldenRatio(Image):
         super().__init__(**kwargs)
         self.phi = 1.618033988749895
         self.size = Window.size
-        self.source = "assets/GoldenRatio.png"
+        self.source = "assets/MathBG.png"
         self.keep_ratio = False
         self.allow_stretch = True
         self.display_title()
@@ -80,11 +81,17 @@ class GoldenRatio(Image):
         self.add_widget(self.label_background)
         self.add_widget(self.label)
 
+    def on_touch_down(self, touch):
+        if self.label.collide_point(*touch.pos):
+            self.parent.manager.transition.direction = "right"
+            self.parent.manager.current = "field"
+        return super().on_touch_down(touch)
+
     def display_field(self):
         self.grid = GridLayout(
             padding=dp(20),
             spacing=dp(20),
-            size=(Window.width*0.8, Window.height-dp(50+60+100)),
+            size=(Window.width*0.8, Window.height-dp(50+20+100)),
             pos=(Window.width*0.1, dp(100)),
             cols=1,
             rows=3
@@ -92,9 +99,10 @@ class GoldenRatio(Image):
         self.generate_button = Button(
             text="Generate Missing Slot",
             font_size=sp(32),
-            background_color=gc("222222"),
+            background_color=gc("888899"),
             size=(Window.width*0.8-dp(40), dp(76)),
-            pos=(Window.width*0.1+dp(20), dp(12))
+            pos=(Window.width*0.1+dp(20), dp(12) +
+                 (0 if platform != "android" else dp(30)))
         )
         self.method1 = Lbel(
             width=((Window.width*0.8-dp(20))-dp(40))/2,
