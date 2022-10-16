@@ -119,7 +119,6 @@ class GoldenRatio(Image):
         self.add_widget(self.generate_button)
 
     def check_if_golden_ratio(self, A, B, S):
-        print("test")
         self.label.color = gc("FFD700") if (round((S / A), 3) == round(self.phi, 3) and
                                             round((A / B), 3) == round(self.phi, 3)) else gc("FFFFFF")
         self.method1.label.text = str(round((S / A), 3))
