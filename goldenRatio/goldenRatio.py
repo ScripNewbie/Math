@@ -106,7 +106,7 @@ class GoldenRatio(Image):
         )
         self.method1 = Lbel(
             width=((Window.width*0.8-dp(20))-dp(40))/2,
-            x=dp(Window.width*0.1+dp(20))
+            x=Window.width*0.1+dp(20)
         )
         self.method1.label.text = "Method 1"
         self.method2 = Lbel(
