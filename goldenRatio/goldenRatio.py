@@ -147,12 +147,18 @@ class GoldenRatio(Image):
             )
             return
         if AS != "":
+            if float(AS) == 0:
+                return
             AS = float(AS)
         if BS != "":
+            if float(BS) == 0:
+                return
             BS = float(BS)
             if AS == "":
                 AS = self.phi * BS
         if SS != "":
+            if float(SS) == 0:
+                return
             SS = float(SS)
             if AS == "":
                 AS = SS / self.phi
