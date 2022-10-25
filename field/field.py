@@ -9,7 +9,8 @@ from kivy.utils import get_color_from_hex as gc
 from selection import (
     Empty,
     GoldenRatioSelection,
-    MatrixSelection
+    MatrixSelection,
+    VectorSelection
 )
 from configuration import ROWS, COLS
 
@@ -35,7 +36,8 @@ class Field(Image):
     def all_variable(self):
         self.all_selection = [
             GoldenRatioSelection,
-            MatrixSelection
+            MatrixSelection,
+            VectorSelection
         ]
 
     def display_title(self):

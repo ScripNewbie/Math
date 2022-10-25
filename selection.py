@@ -59,3 +59,16 @@ class MatrixSelection(Empty):
     def display_field(self):
         super().display_field()
         self.parent.parent.parent.manager.current = "Matrix"
+
+
+class VectorSelection(Empty):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.color = gc("FF55FF")
+        self.opacity = 1
+        self.label.text = "Vector"
+
+    def display_field(self):
+        super().display_field()
+        self.parent.parent.parent.manager.current = "Vector"

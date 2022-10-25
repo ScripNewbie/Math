@@ -426,16 +426,23 @@ class Matrix(Image):
             matrix = matr2 + matrix
         main_deter = self.find_determinant(matrix, self.grid.cols-1)
         main_matrix = list()
-        if main_deter == 0:
-            self.message_alert("Main determinant is Zero.")
-            return
         for cols in range(self.grid.cols-1):
             matr = list()
             matr += matrix
             for rows in range(self.grid.rows):
                 matr[(rows*(self.grid.cols-1))+cols] = e_matrix[rows]
+            determinant = self.find_determinant(
+                matr, self.grid.cols-1)
+            if main_deter == 0:
+                if determinant == 0:
+                    self.message_alert("Infinite Solution")
+                    return
+                continue
             main_matrix.append(self.find_determinant(
                 matr, self.grid.cols-1) / main_deter)
+        if main_deter == 0:
+            self.message_alert("No Solution")
+            return
         if hasattr(self, "answer_label"):
             self.remove_widget(self.answer_label)
             self.remove_widget(self.answer_label_bg)
