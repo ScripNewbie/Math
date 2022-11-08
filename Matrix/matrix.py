@@ -86,6 +86,22 @@ class Matrix(Image):
         self.all_variables()
         self.display_title()
         self.display_field()
+        self.change_size_text()
+        self.setup_window()
+
+    def on_focus(self, *_):
+        self.setup_window()
+
+    def setup_window(self):
+        self._keyboard = Window.request_keyboard(self._keyboard_close, self)
+        self._keyboard.bind(on_key_down=self._keyboard_down_key)
+
+    def _keyboard_close(self):
+        self._keyboard.unbind(on_key_down=self._keyboard_down_key)
+        self._keyboard = None
+
+    def _keyboard_down_key(self, _, key, *__):
+        print(key[1])
 
     def all_variables(self):
         self.start_mat = 3
@@ -103,17 +119,20 @@ class Matrix(Image):
         self.findDeter = Btton(text="Determinant")
         self.findDeter.bind(on_release=self.find_Deter_func)
         self.findChild = Btton(text="Minors")
-        self.findChild.bind(on_release=self.find_child_matrix)
+        self.findChild.bind(on_release=self.find_minors_matrix)
         self.findCofactor = Btton(text="Cofactor")
         self.findCofactor.bind(on_release=self.get_cofactor)
         self.cramersRule = Btton(text="CramersR")
         self.cramersRule.bind(on_release=self.cramersRule_func)
+        self.scalarMatrix = Btton(text="Scalar")
+        self.scalarMatrix.bind(on_release=self.scalar_func)
         self.tools = [
             self.change_size,
             self.addMatrix,
             self.minMatrix,
             self.mulMatrix,
             self.divMatrix,
+            self.scalarMatrix,
             self.findDeter,
             self.findChild,
             self.findCofactor,
@@ -172,7 +191,7 @@ class Matrix(Image):
             pos=(self.grid.x, self.grid.top)
         )
         self.switcher.bind(on_release=self.switch_matrix)
-        for _ in range(self.start_mat*self.start_mat):
+        for i in range(self.start_mat*self.start_mat):
             self.grid.add_widget(TxtInput(100/self.start_mat, gc("222222")))
             self.grid2.add_widget(TxtInput(100/self.start_mat, gc("444444")))
         self.add_widget(self.grid)
@@ -180,7 +199,8 @@ class Matrix(Image):
         self.all_tools()
 
     def change_size_text(self, *_):
-        self.change_size.text = f"[ {self.rslider.value}, {self.cslider.value} ]"
+        self.change_size.text = f"CS: {self.rslider.value}, {self.cslider.value}"
+        self.scalarMatrix.text = f"Scalar: {self.rslider.value}"
 
     def change_size_func(self, *_):
         if self.grid_active == "1":
@@ -280,7 +300,7 @@ class Matrix(Image):
             padding=dp(5),
             spacing=dp(5),
             rows=3,
-            cols=3
+            cols=4
         )
         for i in range(self.grid_tools.cols*self.grid_tools.rows):
             if i >= len(self.tools):
@@ -314,7 +334,7 @@ class Matrix(Image):
         for _ in range(col * row):
             mat.add_widget(TxtInput(100/row, color))
 
-    def find_child_matrix(self, *_):
+    def find_minors_matrix(self, *_):
         if self.grid.cols != self.grid.rows:
             self.message_alert("First matrix must be squared matrix.")
             return
@@ -391,6 +411,11 @@ class Matrix(Image):
             return
         matrix = self.get_mat(self.grid)
         self.label.text = f"Determinant: {self.find_determinant(matrix, self.grid.cols)}"
+
+    def scalar_func(self, *_):
+        for index in range(self.grid.rows*self.grid.cols):
+            self.grid.children[index].text = str(
+                int(self.grid.children[index].text) * self.rslider.value)
 
     def get_cofactor(self, *_):
         if self.grid.cols != self.grid.rows:
